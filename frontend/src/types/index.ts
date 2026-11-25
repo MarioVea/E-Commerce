@@ -122,3 +122,18 @@ export interface Proveedor {
   nombre_proveedor: string
   activo: boolean
 }
+
+export interface TipoUsuario {
+  id_tipo_usuario: number
+  nombre_tipo_usuario: string
+}
+
+export interface EstadoUsuario {
+  id_estado_usuario: number
+  nombre_estado_usuario: string
+}
+
+export interface EstadoVenta {
+  id_estado: number
+  nombre_estado: string
+}
