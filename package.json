@@ -1,0 +1,14 @@
+{
+  "name": "ecommerce-gorras",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "db:pull": "supabase db pull",
+    "db:push": "supabase db push",
+    "db:new": "supabase migration new",
+    "gen:types": "supabase gen types typescript --project-id uetoeesorjhtdwjpilxt > backend/src/types/database.ts"
+  },
+  "devDependencies": {
+    "supabase": "^3.4.0"
+  }
+}
