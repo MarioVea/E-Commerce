@@ -82,7 +82,7 @@ export async function getProfileByAuthId(authId: string): Promise<Usuario | null
     .select(
       `
       *,
-      tipo_usuario ( id_tipo_usuario, nombre_tipo_usuario ),
+      tipo_usuario_rel: tipo_usuario ( id_tipo_usuario, nombre_tipo_usuario ),
       estado_usuario ( id_estado_usuario, nombre_estado_usuario )
     `,
     )

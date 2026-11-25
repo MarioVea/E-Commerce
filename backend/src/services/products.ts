@@ -60,7 +60,12 @@ export async function listProducts(params: {
   if (params.idTipo) {
     query = query.eq('id_tipo', params.idTipo)
   } else if (params.tipo) {
-    const tipoId = await getIdByValue('tipo_producto', 'nombre_tipo', params.tipo)
+    const tipoId = await getIdByValue(
+      'tipo_producto',
+      'id_tipo',
+      'nombre_tipo',
+      params.tipo,
+    )
     query = query.eq('id_tipo', tipoId)
   }
 
