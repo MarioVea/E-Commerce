@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
 import { api } from '../../services/api'
 
 interface Stats {
@@ -27,7 +26,7 @@ export default function AdminDashboard() {
   })
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10">
+    <section>
       <h1 className="text-2xl font-bold">Panel de administración</h1>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -49,29 +48,6 @@ export default function AdminDashboard() {
             ${data ? data.ventas.ingresos.toFixed(2) : '—'}
           </p>
         </div>
-      </div>
-
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Link to="/admin/products" className="rounded-lg bg-white p-6 shadow hover:shadow-md">
-          <h2 className="font-semibold">Productos</h2>
-          <p className="text-sm text-gray-500">Crear, editar, desactivar y subir imágenes.</p>
-        </Link>
-        <Link to="/admin/orders" className="rounded-lg bg-white p-6 shadow hover:shadow-md">
-          <h2 className="font-semibold">Pedidos</h2>
-          <p className="text-sm text-gray-500">Monitorizar ventas y cambiar estados.</p>
-        </Link>
-        <Link to="/admin/returns" className="rounded-lg bg-white p-6 shadow hover:shadow-md">
-          <h2 className="font-semibold">Devoluciones</h2>
-          <p className="text-sm text-gray-500">Cancelaciones y devoluciones.</p>
-        </Link>
-        <Link to="/admin/users" className="rounded-lg bg-white p-6 shadow hover:shadow-md">
-          <h2 className="font-semibold">Usuarios</h2>
-          <p className="text-sm text-gray-500">Clientes, administradores y estados.</p>
-        </Link>
-        <Link to="/admin/catalogs" className="rounded-lg bg-white p-6 shadow hover:shadow-md">
-          <h2 className="font-semibold">Catálogos</h2>
-          <p className="text-sm text-gray-500">Tipos, colores, tallas y proveedores.</p>
-        </Link>
       </div>
 
       {data && (

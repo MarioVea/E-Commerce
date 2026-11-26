@@ -120,6 +120,9 @@ export interface Talla {
 export interface Proveedor {
   id_proveedor: number
   nombre_proveedor: string
+  numero_telefono: string | null
+  direccion: string | null
+  correo_electronico: string | null
   activo: boolean
 }
 

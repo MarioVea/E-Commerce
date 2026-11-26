@@ -176,7 +176,7 @@ export default function AdminProducts() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10">
+    <section>
       <h1 className="text-2xl font-bold">Administrar productos</h1>
 
       <form onSubmit={handleSubmit} className="mt-6 rounded-lg bg-white p-6 shadow">

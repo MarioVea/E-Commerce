@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
@@ -10,6 +10,7 @@ import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Orders from './pages/Orders'
 import Profile from './pages/Profile'
+import AdminLayout from './pages/admin/AdminLayout'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminProducts from './pages/admin/AdminProducts'
 import AdminOrders from './pages/admin/AdminOrders'
@@ -66,50 +67,25 @@ export default function App() {
             path="/admin"
             element={
               <ProtectedRoute role="admin">
-                <AdminDashboard />
+                <AdminLayout />
               </ProtectedRoute>
             }
-          />
-          <Route
-            path="/admin/products"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminProducts />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/orders"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminOrders />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/returns"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminReturns />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/users"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminUsers />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/catalogs"
-            element={
-              <ProtectedRoute role="admin">
-                <AdminCatalogs />
-              </ProtectedRoute>
-            }
-          />
+          >
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="returns" element={<AdminReturns estado="Devuelta" />} />
+            <Route
+              path="cancellations"
+              element={<AdminReturns estado="Cancelada" />}
+            />
+            <Route path="users" element={<AdminUsers />} />
+            <Route
+              path="catalogs"
+              element={<Navigate to="/admin/catalogs/tipos-producto" replace />}
+            />
+            <Route path="catalogs/:catalog" element={<AdminCatalogs />} />
+          </Route>
         </Routes>
       </main>
     </div>

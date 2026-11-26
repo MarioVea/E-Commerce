@@ -21,10 +21,10 @@ export default function AdminUsers() {
     },
   })
 
-  if (isLoading) return <p className="p-8 text-gray-500">Cargando usuarios...</p>
+  if (isLoading) return <p className="text-gray-500">Cargando usuarios...</p>
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10">
+    <section>
       <h1 className="text-2xl font-bold">Usuarios</h1>
 
       <div className="mt-6 overflow-x-auto rounded-lg bg-white shadow">

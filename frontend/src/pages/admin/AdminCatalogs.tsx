@@ -1,71 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { api } from '../../services/api'
 import type { CatalogItem } from '../../types'
-
-interface CatalogField {
-  name: string
-  label: string
-  type?: 'text' | 'checkbox'
-}
-
-interface CatalogConfig {
-  key: string
-  label: string
-  pk: string
-  fields: CatalogField[]
-}
-
-const CATALOGS: CatalogConfig[] = [
-  {
-    key: 'tipos-producto',
-    label: 'Tipos de producto',
-    pk: 'id_tipo',
-    fields: [{ name: 'nombre_tipo', label: 'Nombre' }],
-  },
-  {
-    key: 'colores',
-    label: 'Colores',
-    pk: 'id_color',
-    fields: [{ name: 'nombre_color', label: 'Nombre' }],
-  },
-  {
-    key: 'tallas',
-    label: 'Tallas',
-    pk: 'id_talla',
-    fields: [
-      { name: 'clave_talla', label: 'Clave (XS, S, M...)' },
-      { name: 'nombre_talla', label: 'Nombre' },
-    ],
-  },
-  {
-    key: 'proveedores',
-    label: 'Proveedores',
-    pk: 'id_proveedor',
-    fields: [
-      { name: 'nombre_proveedor', label: 'Nombre' },
-      { name: 'activo', label: 'Activo', type: 'checkbox' },
-    ],
-  },
-  {
-    key: 'tipos-usuario',
-    label: 'Tipos de usuario',
-    pk: 'id_tipo_usuario',
-    fields: [{ name: 'nombre_tipo_usuario', label: 'Nombre' }],
-  },
-  {
-    key: 'estados-usuario',
-    label: 'Estados de usuario',
-    pk: 'id_estado_usuario',
-    fields: [{ name: 'nombre_estado_usuario', label: 'Nombre' }],
-  },
-  {
-    key: 'estados-venta',
-    label: 'Estados de venta',
-    pk: 'id_estado',
-    fields: [{ name: 'nombre_estado', label: 'Nombre' }],
-  },
-]
+import { CATALOGS, type CatalogConfig } from './catalogConfig'
 
 function emptyForm(catalog: CatalogConfig): Record<string, string | boolean> {
   const values: Record<string, string | boolean> = {}
@@ -77,14 +15,33 @@ function emptyForm(catalog: CatalogConfig): Record<string, string | boolean> {
 
 export default function AdminCatalogs() {
   const queryClient = useQueryClient()
-  const [activeKey, setActiveKey] = useState(CATALOGS[0].key)
+  const { catalog: catalogKey } = useParams()
+  const active = CATALOGS.find((catalog) => catalog.key === catalogKey) ?? CATALOGS[0]
+  const activeKey = active.key
   const [form, setForm] = useState<Record<string, string | boolean>>(() =>
-    emptyForm(CATALOGS[0]),
+    emptyForm(active),
   )
   const [editingId, setEditingId] = useState<number | null>(null)
   const [error, setError] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const active = CATALOGS.find((catalog) => catalog.key === activeKey) ?? CATALOGS[0]
+  useEffect(() => {
+    setForm(emptyForm(active))
+    setEditingId(null)
+    setError('')
+    setIsModalOpen(false)
+  }, [activeKey])
+
+  useEffect(() => {
+    if (!isModalOpen) return
+
+    function handleKeyDown(event: KeyboardEvent): void {
+      if (event.key === 'Escape') cancelEdit()
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isModalOpen])
 
   const { data, isLoading } = useQuery({
     queryKey: ['catalogs', activeKey],
@@ -107,6 +64,7 @@ export default function AdminCatalogs() {
     setError('')
     setEditingId(null)
     setForm(emptyForm(active))
+    setIsModalOpen(false)
     queryClient.invalidateQueries({ queryKey: ['catalogs'] })
   }
 
@@ -154,12 +112,21 @@ export default function AdminCatalogs() {
     }
     setForm(values)
     setError('')
+    setIsModalOpen(true)
+  }
+
+  function openCreate(): void {
+    setEditingId(null)
+    setForm(emptyForm(active))
+    setError('')
+    setIsModalOpen(true)
   }
 
   function cancelEdit(): void {
     setEditingId(null)
     setForm(emptyForm(active))
     setError('')
+    setIsModalOpen(false)
   }
 
   function handleDelete(item: CatalogItem): void {
@@ -182,107 +149,31 @@ export default function AdminCatalogs() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10">
-      <h1 className="text-2xl font-bold">Catálogos</h1>
+    <section>
+      <h1 className="text-2xl font-bold">{active.label}</h1>
       <p className="mt-1 text-sm text-gray-500">
         Solo administradores pueden ver y modificar estos datos.
       </p>
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        {CATALOGS.map((catalog) => (
-          <button
-            key={catalog.key}
-            onClick={() => {
-              setActiveKey(catalog.key)
-              setForm(emptyForm(catalog))
-              setEditingId(null)
-              setError('')
-            }}
-            className={`rounded px-4 py-2 text-sm ${
-              catalog.key === activeKey
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 shadow'
-            }`}
-          >
-            {catalog.label}
-          </button>
-        ))}
-      </div>
-
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          if (editingId !== null) {
-            updateItem.mutate({ id: editingId, payload: buildPayload() })
-          } else {
-            createItem.mutate()
-          }
-        }}
-        className="mt-6 flex flex-wrap items-end gap-3 rounded-lg bg-white p-4 shadow"
-      >
-        {active.fields.map((field) =>
-          field.type === 'checkbox' ? (
-            <label key={field.name} className="flex items-center gap-2 text-sm text-gray-600">
-              <input
-                type="checkbox"
-                checked={Boolean(form[field.name])}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, [field.name]: event.target.checked }))
-                }
-                className="h-4 w-4 rounded border-gray-300"
-              />
-              {field.label}
-            </label>
-          ) : (
-            <label key={field.name} className="text-sm text-gray-600">
-              {field.label}
-              <input
-                value={String(form[field.name] ?? '')}
-                onChange={(event) =>
-                  setForm((current) => ({ ...current, [field.name]: event.target.value }))
-                }
-                className="mt-1 block rounded border p-2 text-gray-900"
-                required
-              />
-            </label>
-          ),
-        )}
-
-        <button
-          type="submit"
-          disabled={isSaving}
-          className="rounded bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {editingId !== null
-            ? isSaving
-              ? 'Guardando...'
-              : 'Guardar cambios'
-            : isSaving
-              ? 'Agregando...'
-              : 'Agregar'}
-        </button>
-
-        {editingId !== null && (
-          <button
-            type="button"
-            onClick={cancelEdit}
-            className="rounded border px-4 py-2 font-semibold text-gray-700"
-          >
-            Cancelar
-          </button>
-        )}
-      </form>
-
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
 
       <p className="mt-3 text-xs text-gray-500">
         Nota: algunos catálogos son usados por productos, usuarios o ventas. Si intentas
         eliminar un valor en uso, se mostrará un error y no se borrará.
       </p>
 
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="font-semibold">Registros</h2>
+        <button
+          type="button"
+          onClick={openCreate}
+          className="rounded bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+        >
+          + Nuevo registro
+        </button>
+      </div>
+
       {isLoading && <p className="mt-4 text-gray-500">Cargando...</p>}
 
-      <div className="mt-6 overflow-x-auto rounded-lg bg-white shadow">
+      <div className="mt-3 overflow-x-auto rounded-lg bg-white shadow">
         <table className="min-w-full text-left text-sm">
           <thead className="bg-gray-50 text-gray-600">
             <tr>
@@ -328,6 +219,119 @@ export default function AdminCatalogs() {
           <p className="p-4 text-sm text-gray-500">No hay registros en este catálogo.</p>
         )}
       </div>
+
+      {isModalOpen && (
+        <div
+          role="presentation"
+          onClick={cancelEdit}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="catalog-modal-title"
+            onClick={(event) => event.stopPropagation()}
+            className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <h2 id="catalog-modal-title" className="text-lg font-bold">
+                {editingId !== null
+                  ? `Editar ${active.label.toLowerCase()}`
+                  : `Nuevo registro en ${active.label.toLowerCase()}`}
+              </h2>
+              <button
+                type="button"
+                onClick={cancelEdit}
+                aria-label="Cerrar"
+                className="text-xl leading-none text-gray-400 hover:text-gray-600"
+              >
+                ×
+              </button>
+            </div>
+
+            <form
+              onSubmit={(event) => {
+                event.preventDefault()
+                if (editingId !== null) {
+                  updateItem.mutate({ id: editingId, payload: buildPayload() })
+                } else {
+                  createItem.mutate()
+                }
+              }}
+              className="mt-4 space-y-4"
+            >
+              {active.fields.map((field) =>
+                field.type === 'checkbox' ? (
+                  <label
+                    key={field.name}
+                    className="flex items-center gap-2 text-sm text-gray-600"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={Boolean(form[field.name])}
+                      onChange={(event) =>
+                        setForm((current) => ({
+                          ...current,
+                          [field.name]: event.target.checked,
+                        }))
+                      }
+                      className="h-4 w-4 rounded border-gray-300"
+                    />
+                    {field.label}
+                  </label>
+                ) : (
+                  <label key={field.name} className="block text-sm text-gray-600">
+                    {field.label}
+                    <input
+                      type={
+                        field.type === 'email'
+                          ? 'email'
+                          : field.type === 'tel'
+                            ? 'tel'
+                            : 'text'
+                      }
+                      value={String(form[field.name] ?? '')}
+                      onChange={(event) =>
+                        setForm((current) => ({
+                          ...current,
+                          [field.name]: event.target.value,
+                        }))
+                      }
+                      className="mt-1 block w-full rounded border p-2 text-gray-900"
+                      required
+                    />
+                  </label>
+                ),
+              )}
+
+              {error && <p className="text-sm text-red-600">{error}</p>}
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={cancelEdit}
+                  className="rounded border px-4 py-2 font-semibold text-gray-700"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="rounded bg-indigo-600 px-4 py-2 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+                >
+                  {editingId !== null
+                    ? isSaving
+                      ? 'Guardando...'
+                      : 'Guardar cambios'
+                    : isSaving
+                      ? 'Agregando...'
+                      : 'Agregar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
