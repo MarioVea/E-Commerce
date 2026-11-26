@@ -23,7 +23,7 @@ export default function AdminLayout() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="flex w-full flex-col gap-4 px-2 py-6 lg:flex-row lg:gap-6">
+    <div className="flex w-full flex-col gap-4 px-6 py-6 lg:flex-row lg:gap-6 lg:px-8">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}

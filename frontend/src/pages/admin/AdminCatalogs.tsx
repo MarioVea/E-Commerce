@@ -151,14 +151,6 @@ export default function AdminCatalogs() {
   return (
     <section>
       <h1 className="text-2xl font-bold">{active.label}</h1>
-      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-        Solo administradores pueden ver y modificar estos datos.
-      </p>
-
-      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
-        Nota: algunos catálogos son usados por productos, usuarios o ventas. Si intentas
-        eliminar un valor en uso, se mostrará un error y no se borrará.
-      </p>
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <h2 className="font-semibold">Registros</h2>

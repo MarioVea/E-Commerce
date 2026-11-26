@@ -6,7 +6,17 @@ import { ApiError, asyncHandler } from '../utils/http'
 import { bootstrapSchema } from '../validators/auth'
 import { createProductSchema, updateProductSchema } from '../validators/products'
 import { updateOrderStatusSchema } from '../validators/orders'
-import { createProfile, splitFullName } from '../services/users'
+import {
+  createAdminUser,
+  createProfile,
+  listUsersWithEmail,
+  splitFullName,
+  updateAdminUser,
+} from '../services/users'
+import {
+  createAdminUserSchema,
+  updateAdminUserSchema,
+} from '../validators/users'
 import {
   createProduct,
   deactivateProduct,
@@ -222,19 +232,25 @@ adminRouter.get(
 adminRouter.get(
   '/users',
   asyncHandler(async (_req, res) => {
-    const { data, error } = await supabaseAdmin
-      .from('usuario')
-      .select(
-        `
-        *,
-        tipo_usuario_rel: tipo_usuario ( id_tipo_usuario, nombre_tipo_usuario ),
-        estado_usuario ( id_estado_usuario, nombre_estado_usuario )
-      `,
-      )
-      .order('id_usuario')
+    res.json(await listUsersWithEmail())
+  }),
+)
 
-    if (error) throw new ApiError(500, error.message)
-    res.json(data ?? [])
+adminRouter.post(
+  '/users',
+  asyncHandler(async (req, res) => {
+    const input = createAdminUserSchema.parse(req.body)
+    const user = await createAdminUser(input)
+    res.status(201).json(user)
+  }),
+)
+
+adminRouter.put(
+  '/users/:id',
+  asyncHandler(async (req, res) => {
+    const input = updateAdminUserSchema.parse(req.body)
+    const user = await updateAdminUser(Number(req.params.id), input)
+    res.json(user)
   }),
 )
 
