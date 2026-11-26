@@ -26,23 +26,23 @@ export default function AdminOrders() {
     },
   })
 
-  if (isLoading) return <p className="p-8 text-gray-500">Cargando pedidos...</p>
+  if (isLoading) return <p className="text-gray-500 dark:text-gray-400">Cargando pedidos...</p>
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10">
+    <section>
       <h1 className="text-2xl font-bold">Pedidos</h1>
 
       {(!data || data.length === 0) && (
-        <p className="mt-4 text-gray-600">No hay pedidos registrados.</p>
+        <p className="mt-4 text-gray-600 dark:text-gray-300">No hay pedidos registrados.</p>
       )}
 
       <div className="mt-6 space-y-4">
         {data?.map((order) => (
-          <article key={order.id_venta} className="rounded-lg bg-white p-5 shadow">
+          <article key={order.id_venta} className="rounded-lg bg-white dark:bg-gray-800 p-5 shadow">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
                 <h2 className="font-semibold">Pedido #{order.id_venta}</h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {order.usuario
                     ? `${order.usuario.nombre} ${order.usuario.primer_apellido}`
                     : `Usuario #${order.id_usuario}`}{' '}

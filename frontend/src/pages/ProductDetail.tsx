@@ -30,8 +30,8 @@ export default function ProductDetail() {
     }
   }, [data, selectedVariantId])
 
-  if (isLoading) return <p className="p-8 text-gray-500">Cargando...</p>
-  if (isError || !data) return <p className="p-8 text-red-600">Producto no encontrado.</p>
+  if (isLoading) return <p className="p-8 text-gray-500 dark:text-gray-400">Cargando...</p>
+  if (isError || !data) return <p className="p-8 text-red-600 dark:text-red-400">Producto no encontrado.</p>
 
   const variant = data.variantes.find(
     (item) => item.id_producto_color === selectedVariantId,
@@ -69,22 +69,22 @@ export default function ProductDetail() {
           className="w-full rounded-lg object-cover"
         />
       ) : (
-        <div className="flex h-80 items-center justify-center rounded-lg bg-gray-100 text-7xl">
+        <div className="flex h-80 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700 text-7xl">
           🧢
         </div>
       )}
 
       <div>
         <h1 className="text-3xl font-bold">{data.nombre_producto}</h1>
-        <p className="mt-1 text-sm text-gray-500">{data.tipo ?? 'Sin categoría'}</p>
-        <p className="mt-2 text-2xl text-indigo-600">
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{data.tipo ?? 'Sin categoría'}</p>
+        <p className="mt-2 text-2xl text-indigo-600 dark:text-indigo-400">
           ${(variant?.precio_venta ?? data.precio).toFixed(2)}
         </p>
-        <p className="mt-4 text-gray-600">{data.descripcion_producto}</p>
+        <p className="mt-4 text-gray-600 dark:text-gray-300">{data.descripcion_producto}</p>
 
         {data.variantes.length > 0 ? (
           <div className="mt-6">
-            <p className="text-sm font-medium text-gray-700">Variante</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Variante</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {data.variantes.map((item) => (
                 <button
@@ -92,8 +92,8 @@ export default function ProductDetail() {
                   onClick={() => setSelectedVariantId(item.id_producto_color)}
                   className={`rounded border px-3 py-2 text-sm ${
                     item.id_producto_color === selectedVariantId
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                      : 'border-gray-300'
+                      ? 'border-indigo-600 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300'
+                      : 'border-gray-300 dark:border-gray-600'
                   } ${item.stock <= 0 ? 'opacity-50' : ''}`}
                 >
                   {item.color ?? 'Color'} / {item.talla ?? 'Única'}
@@ -102,17 +102,17 @@ export default function ProductDetail() {
               ))}
             </div>
             {variant && (
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 Stock disponible: {variant.stock}
               </p>
             )}
           </div>
         ) : (
-          <p className="mt-6 text-sm text-red-600">Producto sin variantes registradas.</p>
+          <p className="mt-6 text-sm text-red-600 dark:text-red-400">Producto sin variantes registradas.</p>
         )}
 
         <div className="mt-6 flex items-center gap-3">
-          <label className="text-sm text-gray-700">Cantidad</label>
+          <label className="text-sm text-gray-700 dark:text-gray-200">Cantidad</label>
           <input
             type="number"
             min={1}
@@ -131,9 +131,9 @@ export default function ProductDetail() {
           Agregar al carrito
         </button>
 
-        {message && <p className="mt-3 text-sm text-green-700">{message}</p>}
+        {message && <p className="mt-3 text-sm text-green-700 dark:text-green-400">{message}</p>}
 
-        <Link to="/cart" className="mt-4 block text-sm text-indigo-600">
+        <Link to="/cart" className="mt-4 block text-sm text-indigo-600 dark:text-indigo-400">
           Ir al carrito
         </Link>
       </div>

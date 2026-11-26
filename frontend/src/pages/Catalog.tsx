@@ -69,9 +69,9 @@ export default function Catalog() {
         </button>
       </form>
 
-      {isLoading && <p className="mt-8 text-gray-500">Cargando productos...</p>}
+      {isLoading && <p className="mt-8 text-gray-500 dark:text-gray-400">Cargando productos...</p>}
       {isError && (
-        <p className="mt-8 text-red-600">
+        <p className="mt-8 text-red-600 dark:text-red-400">
           No se pudieron cargar los productos. Verifica que el backend esté corriendo y la base
           configurada.
         </p>
@@ -82,7 +82,7 @@ export default function Catalog() {
           <Link
             key={product.id_producto}
             to={`/product/${product.id_producto}`}
-            className="rounded-lg bg-white p-4 shadow transition hover:shadow-md"
+            className="rounded-lg bg-white dark:bg-gray-800 p-4 shadow transition hover:shadow-md"
           >
             {product.imagen_url ? (
               <img
@@ -91,18 +91,18 @@ export default function Catalog() {
                 className="h-48 w-full rounded object-cover"
               />
             ) : (
-              <div className="flex h-48 items-center justify-center rounded bg-gray-100 text-4xl">
+              <div className="flex h-48 items-center justify-center rounded bg-gray-100 dark:bg-gray-700 text-4xl">
                 🧢
               </div>
             )}
             <div className="mt-3 flex items-start justify-between gap-2">
               <h2 className="font-semibold">{product.nombre_producto}</h2>
-              <span className="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600">
+              <span className="rounded bg-gray-100 dark:bg-gray-700 px-2 py-1 text-xs text-gray-600 dark:text-gray-300">
                 {product.tipo ?? 'Sin tipo'}
               </span>
             </div>
-            <p className="text-indigo-600">${product.precio.toFixed(2)}</p>
-            <p className="text-xs text-gray-500">
+            <p className="text-indigo-600 dark:text-indigo-400">${product.precio.toFixed(2)}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}
             </p>
           </Link>
@@ -110,7 +110,7 @@ export default function Catalog() {
       </div>
 
       {!isLoading && visible.length === 0 && (
-        <p className="mt-8 text-gray-500">No se encontraron productos.</p>
+        <p className="mt-8 text-gray-500 dark:text-gray-400">No se encontraron productos.</p>
       )}
     </section>
   )

@@ -26,7 +26,13 @@ const CATALOGS: Record<string, CatalogConfig> = {
   proveedores: {
     table: 'proveedor',
     pk: 'id_proveedor',
-    fields: ['nombre_proveedor', 'activo'],
+    fields: [
+      'nombre_proveedor',
+      'numero_telefono',
+      'direccion',
+      'correo_electronico',
+      'activo',
+    ],
   },
   'tipos-usuario': {
     table: 'tipo_usuario',

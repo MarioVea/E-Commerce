@@ -44,7 +44,7 @@ export default function Login() {
           className="w-full rounded border p-3"
           required
         />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         <button
           type="submit"
           disabled={loading}
@@ -53,9 +53,9 @@ export default function Login() {
           {loading ? 'Ingresando...' : 'Ingresar'}
         </button>
       </form>
-      <p className="mt-4 text-sm text-gray-600">
+      <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">
         ¿No tienes cuenta?{' '}
-        <Link to="/register" className="text-indigo-600">
+        <Link to="/register" className="text-indigo-600 dark:text-indigo-400">
           Regístrate
         </Link>
       </p>

@@ -18,6 +18,18 @@ export default function AdminProducts() {
   const [imagen, setImagen] = useState<File | null>(null)
   const [editing, setEditing] = useState<Product | null>(null)
   const [error, setError] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+    if (!isModalOpen) return
+
+    function handleKeyDown(event: KeyboardEvent): void {
+      if (event.key === 'Escape') resetForm()
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isModalOpen])
 
   const productsQuery = useQuery({
     queryKey: ['admin-products'],
@@ -139,6 +151,8 @@ export default function AdminProducts() {
   function resetForm() {
     setEditing(null)
     setImagen(null)
+    setError('')
+    setIsModalOpen(false)
     setForm({
       nombre_producto: '',
       descripcion_producto: '',
@@ -154,6 +168,8 @@ export default function AdminProducts() {
   function startEdit(product: Product) {
     setEditing(product)
     setImagen(null)
+    setError('')
+    setIsModalOpen(true)
     setForm({
       nombre_producto: product.nombre_producto,
       descripcion_producto: product.descripcion_producto ?? '',
@@ -175,134 +191,35 @@ export default function AdminProducts() {
     }
   }
 
+  const isSaving = createProduct.isPending || updateProduct.isPending
+
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10">
+    <section>
       <h1 className="text-2xl font-bold">Administrar productos</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 rounded-lg bg-white p-6 shadow">
-        <h2 className="font-semibold">{editing ? 'Editar producto' : 'Nuevo producto'}</h2>
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="font-semibold">Productos</h2>
+        <button
+          type="button"
+          onClick={() => {
+            resetForm()
+            setIsModalOpen(true)
+          }}
+          className="rounded bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+        >
+          + Nuevo producto
+        </button>
+      </div>
 
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <input
-            value={form.nombre_producto}
-            onChange={(e) => setForm({ ...form, nombre_producto: e.target.value })}
-            placeholder="Nombre del producto"
-            className="rounded border p-3"
-            required
-          />
-          <select
-            value={form.id_tipo}
-            onChange={(e) => setForm({ ...form, id_tipo: e.target.value })}
-            className="rounded border p-3"
-            required
-          >
-            <option value="">Tipo de producto</option>
-            {(tiposQuery.data ?? []).map((tipo) => (
-              <option key={tipo.id_tipo} value={tipo.id_tipo}>
-                {tipo.nombre_tipo}
-              </option>
-            ))}
-          </select>
-          <textarea
-            value={form.descripcion_producto}
-            onChange={(e) => setForm({ ...form, descripcion_producto: e.target.value })}
-            placeholder="Descripción"
-            className="rounded border p-3 sm:col-span-2"
-            rows={2}
-          />
+      {error && !isModalOpen && (
+        <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>
+      )}
 
-          {!editing && (
-            <>
-              <select
-                value={form.id_color}
-                onChange={(e) => setForm({ ...form, id_color: e.target.value })}
-                className="rounded border p-3"
-                required
-              >
-                <option value="">Color</option>
-                {(coloresQuery.data ?? []).map((color) => (
-                  <option key={color.id_color} value={color.id_color}>
-                    {color.nombre_color}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={form.id_talla}
-                onChange={(e) => setForm({ ...form, id_talla: e.target.value })}
-                className="rounded border p-3"
-                required
-              >
-                <option value="">Talla</option>
-                {(tallasQuery.data ?? []).map((talla) => (
-                  <option key={talla.id_talla} value={talla.id_talla}>
-                    {talla.clave_talla} — {talla.nombre_talla}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="number"
-                min={0}
-                step="0.01"
-                value={form.precio_compra}
-                onChange={(e) => setForm({ ...form, precio_compra: e.target.value })}
-                placeholder="Precio compra"
-                className="rounded border p-3"
-              />
-              <input
-                type="number"
-                min={0}
-                step="0.01"
-                value={form.precio_venta}
-                onChange={(e) => setForm({ ...form, precio_venta: e.target.value })}
-                placeholder="Precio venta"
-                className="rounded border p-3"
-                required
-              />
-              <input
-                type="number"
-                min={0}
-                value={form.stock}
-                onChange={(e) => setForm({ ...form, stock: e.target.value })}
-                placeholder="Stock inicial"
-                className="rounded border p-3"
-              />
-              <input
-                type="file"
-                accept="image/png,image/jpeg,image/webp"
-                onChange={(e) => setImagen(e.target.files?.[0] ?? null)}
-                className="rounded border p-2"
-              />
-            </>
-          )}
-        </div>
-
-        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
-
-        <div className="mt-4 flex gap-2">
-          <button
-            type="submit"
-            disabled={createProduct.isPending || updateProduct.isPending}
-            className="rounded bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
-          >
-            {editing ? 'Guardar cambios' : 'Crear producto'}
-          </button>
-          {editing && (
-            <button
-              type="button"
-              onClick={resetForm}
-              className="rounded border px-5 py-3 font-semibold text-gray-700"
-            >
-              Cancelar
-            </button>
-          )}
-        </div>
-      </form>
-
-      <div className="mt-8 space-y-4">
+      <div className="mt-3 space-y-4">
         {(productsQuery.data ?? []).map((product) => (
           <article
             key={product.id_producto}
-            className="flex flex-col gap-4 rounded-lg bg-white p-4 shadow sm:flex-row sm:items-center"
+            className="flex flex-col gap-4 rounded-lg bg-white dark:bg-gray-800 p-4 shadow sm:flex-row sm:items-center"
           >
             {product.imagen_url ? (
               <img
@@ -311,22 +228,22 @@ export default function AdminProducts() {
                 className="h-20 w-20 rounded object-cover"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded bg-gray-100 text-3xl">
+              <div className="flex h-20 w-20 items-center justify-center rounded bg-gray-100 dark:bg-gray-700 text-3xl">
                 🧢
               </div>
             )}
 
             <div className="flex-1">
               <h2 className="font-semibold">{product.nombre_producto}</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {product.tipo ?? 'Sin tipo'} · ${product.precio.toFixed(2)} · Stock:{' '}
                 {product.stock}
               </p>
               <span
                 className={`mt-1 inline-block rounded px-2 py-1 text-xs ${
                   product.activo
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-200 text-gray-700'
+                    ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
                 }`}
               >
                 {product.activo ? 'Activo' : 'Inactivo'}
@@ -362,6 +279,159 @@ export default function AdminProducts() {
           </article>
         ))}
       </div>
+
+      {isModalOpen && (
+        <div
+          role="presentation"
+          onClick={resetForm}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/70 p-4"
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="product-modal-title"
+            onClick={(event) => event.stopPropagation()}
+            className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <h2 id="product-modal-title" className="text-lg font-bold">
+                {editing ? 'Editar producto' : 'Nuevo producto'}
+              </h2>
+              <button
+                type="button"
+                onClick={resetForm}
+                aria-label="Cerrar"
+                className="text-xl leading-none text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="mt-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <input
+                  value={form.nombre_producto}
+                  onChange={(e) => setForm({ ...form, nombre_producto: e.target.value })}
+                  placeholder="Nombre del producto"
+                  className="rounded border p-3"
+                  required
+                />
+                <select
+                  value={form.id_tipo}
+                  onChange={(e) => setForm({ ...form, id_tipo: e.target.value })}
+                  className="rounded border p-3"
+                  required
+                >
+                  <option value="">Tipo de producto</option>
+                  {(tiposQuery.data ?? []).map((tipo) => (
+                    <option key={tipo.id_tipo} value={tipo.id_tipo}>
+                      {tipo.nombre_tipo}
+                    </option>
+                  ))}
+                </select>
+                <textarea
+                  value={form.descripcion_producto}
+                  onChange={(e) =>
+                    setForm({ ...form, descripcion_producto: e.target.value })
+                  }
+                  placeholder="Descripción"
+                  className="rounded border p-3 sm:col-span-2"
+                  rows={2}
+                />
+
+                {!editing && (
+                  <>
+                    <select
+                      value={form.id_color}
+                      onChange={(e) => setForm({ ...form, id_color: e.target.value })}
+                      className="rounded border p-3"
+                      required
+                    >
+                      <option value="">Color</option>
+                      {(coloresQuery.data ?? []).map((color) => (
+                        <option key={color.id_color} value={color.id_color}>
+                          {color.nombre_color}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      value={form.id_talla}
+                      onChange={(e) => setForm({ ...form, id_talla: e.target.value })}
+                      className="rounded border p-3"
+                      required
+                    >
+                      <option value="">Talla</option>
+                      {(tallasQuery.data ?? []).map((talla) => (
+                        <option key={talla.id_talla} value={talla.id_talla}>
+                          {talla.clave_talla} — {talla.nombre_talla}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      value={form.precio_compra}
+                      onChange={(e) => setForm({ ...form, precio_compra: e.target.value })}
+                      placeholder="Precio compra"
+                      className="rounded border p-3"
+                    />
+                    <input
+                      type="number"
+                      min={0}
+                      step="0.01"
+                      value={form.precio_venta}
+                      onChange={(e) => setForm({ ...form, precio_venta: e.target.value })}
+                      placeholder="Precio venta"
+                      className="rounded border p-3"
+                      required
+                    />
+                    <input
+                      type="number"
+                      min={0}
+                      value={form.stock}
+                      onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                      placeholder="Stock inicial"
+                      className="rounded border p-3"
+                    />
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      onChange={(e) => setImagen(e.target.files?.[0] ?? null)}
+                      className="rounded border p-2"
+                    />
+                  </>
+                )}
+              </div>
+
+              {error && <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>}
+
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  className="rounded border px-5 py-3 font-semibold text-gray-700 dark:text-gray-200"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="rounded bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+                >
+                  {editing
+                    ? isSaving
+                      ? 'Guardando...'
+                      : 'Guardar cambios'
+                    : isSaving
+                      ? 'Creando...'
+                      : 'Crear producto'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

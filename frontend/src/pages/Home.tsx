@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <section className="mx-auto max-w-6xl px-4 py-16 text-center">
       <h1 className="text-4xl font-bold">Gorras para todos los estilos</h1>
-      <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+      <p className="mx-auto mt-4 max-w-2xl text-gray-600 dark:text-gray-300">
         Explora nuestro catálogo, busca tus gorras favoritas y compra en línea.
       </p>
       <Link
