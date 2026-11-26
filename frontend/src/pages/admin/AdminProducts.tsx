@@ -179,7 +179,7 @@ export default function AdminProducts() {
     <section>
       <h1 className="text-2xl font-bold">Administrar productos</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 rounded-lg bg-white p-6 shadow">
+      <form onSubmit={handleSubmit} className="mt-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow">
         <h2 className="font-semibold">{editing ? 'Editar producto' : 'Nuevo producto'}</h2>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -276,7 +276,7 @@ export default function AdminProducts() {
           )}
         </div>
 
-        {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-3 text-sm text-red-600 dark:text-red-400">{error}</p>}
 
         <div className="mt-4 flex gap-2">
           <button
@@ -290,7 +290,7 @@ export default function AdminProducts() {
             <button
               type="button"
               onClick={resetForm}
-              className="rounded border px-5 py-3 font-semibold text-gray-700"
+              className="rounded border px-5 py-3 font-semibold text-gray-700 dark:text-gray-200"
             >
               Cancelar
             </button>
@@ -302,7 +302,7 @@ export default function AdminProducts() {
         {(productsQuery.data ?? []).map((product) => (
           <article
             key={product.id_producto}
-            className="flex flex-col gap-4 rounded-lg bg-white p-4 shadow sm:flex-row sm:items-center"
+            className="flex flex-col gap-4 rounded-lg bg-white dark:bg-gray-800 p-4 shadow sm:flex-row sm:items-center"
           >
             {product.imagen_url ? (
               <img
@@ -311,22 +311,22 @@ export default function AdminProducts() {
                 className="h-20 w-20 rounded object-cover"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded bg-gray-100 text-3xl">
+              <div className="flex h-20 w-20 items-center justify-center rounded bg-gray-100 dark:bg-gray-700 text-3xl">
                 🧢
               </div>
             )}
 
             <div className="flex-1">
               <h2 className="font-semibold">{product.nombre_producto}</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {product.tipo ?? 'Sin tipo'} · ${product.precio.toFixed(2)} · Stock:{' '}
                 {product.stock}
               </p>
               <span
                 className={`mt-1 inline-block rounded px-2 py-1 text-xs ${
                   product.activo
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-200 text-gray-700'
+                    ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
                 }`}
               >
                 {product.activo ? 'Activo' : 'Inactivo'}

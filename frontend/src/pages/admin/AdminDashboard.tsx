@@ -30,20 +30,20 @@ export default function AdminDashboard() {
       <h1 className="text-2xl font-bold">Panel de administración</h1>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg bg-white p-5 shadow">
-          <p className="text-sm text-gray-500">Productos activos</p>
+        <div className="rounded-lg bg-white dark:bg-gray-800 p-5 shadow">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Productos activos</p>
           <p className="text-2xl font-bold">{data?.productos ?? '—'}</p>
         </div>
-        <div className="rounded-lg bg-white p-5 shadow">
-          <p className="text-sm text-gray-500">Usuarios</p>
+        <div className="rounded-lg bg-white dark:bg-gray-800 p-5 shadow">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Usuarios</p>
           <p className="text-2xl font-bold">{data?.usuarios ?? '—'}</p>
         </div>
-        <div className="rounded-lg bg-white p-5 shadow">
-          <p className="text-sm text-gray-500">Ventas</p>
+        <div className="rounded-lg bg-white dark:bg-gray-800 p-5 shadow">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Ventas</p>
           <p className="text-2xl font-bold">{data?.ventas.total ?? '—'}</p>
         </div>
-        <div className="rounded-lg bg-white p-5 shadow">
-          <p className="text-sm text-gray-500">Ingresos</p>
+        <div className="rounded-lg bg-white dark:bg-gray-800 p-5 shadow">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Ingresos</p>
           <p className="text-2xl font-bold">
             ${data ? data.ventas.ingresos.toFixed(2) : '—'}
           </p>
@@ -60,8 +60,8 @@ export default function AdminDashboard() {
             ['Canceladas', data.ventas.canceladas],
             ['Devueltas', data.ventas.devueltas],
           ].map(([label, value]) => (
-            <div key={String(label)} className="rounded bg-white p-4 text-center shadow">
-              <p className="text-xs text-gray-500">{label}</p>
+            <div key={String(label)} className="rounded bg-white dark:bg-gray-800 p-4 text-center shadow">
+              <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
               <p className="text-lg font-bold">{value}</p>
             </div>
           ))}

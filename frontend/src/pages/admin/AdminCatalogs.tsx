@@ -151,11 +151,11 @@ export default function AdminCatalogs() {
   return (
     <section>
       <h1 className="text-2xl font-bold">{active.label}</h1>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
         Solo administradores pueden ver y modificar estos datos.
       </p>
 
-      <p className="mt-3 text-xs text-gray-500">
+      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
         Nota: algunos catálogos son usados por productos, usuarios o ventas. Si intentas
         eliminar un valor en uso, se mostrará un error y no se borrará.
       </p>
@@ -171,11 +171,11 @@ export default function AdminCatalogs() {
         </button>
       </div>
 
-      {isLoading && <p className="mt-4 text-gray-500">Cargando...</p>}
+      {isLoading && <p className="mt-4 text-gray-500 dark:text-gray-400">Cargando...</p>}
 
-      <div className="mt-3 overflow-x-auto rounded-lg bg-white shadow">
+      <div className="mt-3 overflow-x-auto rounded-lg bg-white dark:bg-gray-800 shadow">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-gray-50 text-gray-600">
+          <thead className="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
             <tr>
               {columns.map((column) => (
                 <th key={column} className="p-3">
@@ -197,14 +197,14 @@ export default function AdminCatalogs() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => startEdit(item)}
-                      className="text-sm text-indigo-600 hover:text-indigo-700"
+                      className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300"
                     >
                       Editar
                     </button>
                     <button
                       onClick={() => handleDelete(item)}
                       disabled={deleteItem.isPending}
-                      className="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                      className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-400 disabled:opacity-50"
                     >
                       Eliminar
                     </button>
@@ -216,7 +216,7 @@ export default function AdminCatalogs() {
         </table>
 
         {!isLoading && (data ?? []).length === 0 && (
-          <p className="p-4 text-sm text-gray-500">No hay registros en este catálogo.</p>
+          <p className="p-4 text-sm text-gray-500 dark:text-gray-400">No hay registros en este catálogo.</p>
         )}
       </div>
 
@@ -224,14 +224,14 @@ export default function AdminCatalogs() {
         <div
           role="presentation"
           onClick={cancelEdit}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/70 p-4"
         >
           <div
             role="dialog"
             aria-modal="true"
             aria-labelledby="catalog-modal-title"
             onClick={(event) => event.stopPropagation()}
-            className="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl"
+            className="w-full max-w-lg rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl"
           >
             <div className="flex items-start justify-between gap-4">
               <h2 id="catalog-modal-title" className="text-lg font-bold">
@@ -243,7 +243,7 @@ export default function AdminCatalogs() {
                 type="button"
                 onClick={cancelEdit}
                 aria-label="Cerrar"
-                className="text-xl leading-none text-gray-400 hover:text-gray-600"
+                className="text-xl leading-none text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
               >
                 ×
               </button>
@@ -264,7 +264,7 @@ export default function AdminCatalogs() {
                 field.type === 'checkbox' ? (
                   <label
                     key={field.name}
-                    className="flex items-center gap-2 text-sm text-gray-600"
+                    className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"
                   >
                     <input
                       type="checkbox"
@@ -275,12 +275,12 @@ export default function AdminCatalogs() {
                           [field.name]: event.target.checked,
                         }))
                       }
-                      className="h-4 w-4 rounded border-gray-300"
+                      className="h-4 w-4 rounded border-gray-300 dark:border-gray-600"
                     />
                     {field.label}
                   </label>
                 ) : (
-                  <label key={field.name} className="block text-sm text-gray-600">
+                  <label key={field.name} className="block text-sm text-gray-600 dark:text-gray-300">
                     {field.label}
                     <input
                       type={
@@ -297,20 +297,20 @@ export default function AdminCatalogs() {
                           [field.name]: event.target.value,
                         }))
                       }
-                      className="mt-1 block w-full rounded border p-2 text-gray-900"
+                      className="mt-1 block w-full rounded border p-2 text-gray-900 dark:text-gray-100"
                       required
                     />
                   </label>
                 ),
               )}
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+              {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
               <div className="flex justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={cancelEdit}
-                  className="rounded border px-4 py-2 font-semibold text-gray-700"
+                  className="rounded border px-4 py-2 font-semibold text-gray-700 dark:text-gray-200"
                 >
                   Cancelar
                 </button>

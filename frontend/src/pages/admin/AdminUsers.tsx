@@ -21,15 +21,15 @@ export default function AdminUsers() {
     },
   })
 
-  if (isLoading) return <p className="text-gray-500">Cargando usuarios...</p>
+  if (isLoading) return <p className="text-gray-500 dark:text-gray-400">Cargando usuarios...</p>
 
   return (
     <section>
       <h1 className="text-2xl font-bold">Usuarios</h1>
 
-      <div className="mt-6 overflow-x-auto rounded-lg bg-white shadow">
+      <div className="mt-6 overflow-x-auto rounded-lg bg-white dark:bg-gray-800 shadow">
         <table className="min-w-full text-left text-sm">
-          <thead className="bg-gray-50 text-gray-600">
+          <thead className="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
             <tr>
               <th className="p-3">ID</th>
               <th className="p-3">Nombre</th>

@@ -34,8 +34,8 @@ export default function Checkout() {
     return (
       <section className="mx-auto max-w-4xl px-4 py-16">
         <h1 className="text-2xl font-bold">Checkout</h1>
-        <p className="mt-4 text-gray-600">No hay productos en el carrito.</p>
-        <Link to="/catalog" className="mt-4 inline-block text-indigo-600">
+        <p className="mt-4 text-gray-600 dark:text-gray-300">No hay productos en el carrito.</p>
+        <Link to="/catalog" className="mt-4 inline-block text-indigo-600 dark:text-indigo-400">
           Volver al catálogo
         </Link>
       </section>
@@ -46,7 +46,7 @@ export default function Checkout() {
     <section className="mx-auto max-w-4xl px-4 py-10">
       <h1 className="text-2xl font-bold">Checkout</h1>
 
-      <div className="mt-6 rounded-lg bg-white p-6 shadow">
+      <div className="mt-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow">
         <h2 className="font-semibold">Resumen</h2>
         <ul className="mt-3 divide-y">
           {items.map((item) => (
@@ -62,7 +62,7 @@ export default function Checkout() {
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6">
-        {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+        {error && <p className="mb-4 text-sm text-red-600 dark:text-red-400">{error}</p>}
         <button
           type="submit"
           disabled={loading}

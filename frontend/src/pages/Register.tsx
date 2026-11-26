@@ -68,13 +68,13 @@ export default function Register() {
           onChange={(e) => update('segundoApellido', e.target.value)}
           className="w-full rounded border p-3"
         />
-        <label className="block text-sm text-gray-600">
+        <label className="block text-sm text-gray-600 dark:text-gray-300">
           Fecha de nacimiento (opcional)
           <input
             type="date"
             value={form.fechaNacimiento}
             onChange={(e) => update('fechaNacimiento', e.target.value)}
-            className="mt-1 w-full rounded border p-3 text-gray-900"
+            className="mt-1 w-full rounded border p-3 text-gray-900 dark:text-gray-100"
           />
         </label>
         <input
@@ -94,7 +94,7 @@ export default function Register() {
           required
           minLength={6}
         />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         <button
           type="submit"
           disabled={loading}
@@ -103,9 +103,9 @@ export default function Register() {
           {loading ? 'Creando...' : 'Registrarme'}
         </button>
       </form>
-      <p className="mt-4 text-sm text-gray-600">
+      <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">
         ¿Ya tienes cuenta?{' '}
-        <Link to="/login" className="text-indigo-600">
+        <Link to="/login" className="text-indigo-600 dark:text-indigo-400">
           Inicia sesión
         </Link>
       </p>

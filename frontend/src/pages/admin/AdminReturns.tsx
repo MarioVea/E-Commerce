@@ -18,7 +18,7 @@ export default function AdminReturns({ estado }: AdminReturnsProps) {
     },
   })
 
-  if (isLoading) return <p className="text-gray-500">Cargando {titulo.toLowerCase()}...</p>
+  if (isLoading) return <p className="text-gray-500 dark:text-gray-400">Cargando {titulo.toLowerCase()}...</p>
 
   const orders = (data ?? []).filter(
     (order) => order.estado_venta?.nombre_estado === estado,
@@ -29,7 +29,7 @@ export default function AdminReturns({ estado }: AdminReturnsProps) {
       <h1 className="text-2xl font-bold">{titulo}</h1>
 
       {orders.length === 0 && (
-        <p className="mt-4 text-gray-600">
+        <p className="mt-4 text-gray-600 dark:text-gray-300">
           {isReturn
             ? 'No hay devoluciones registradas.'
             : 'No hay cancelaciones registradas.'}
@@ -38,18 +38,18 @@ export default function AdminReturns({ estado }: AdminReturnsProps) {
 
       <div className="mt-6 space-y-4">
         {orders.map((order) => (
-          <article key={order.id_venta} className="rounded-lg bg-white p-5 shadow">
+          <article key={order.id_venta} className="rounded-lg bg-white dark:bg-gray-800 p-5 shadow">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <h2 className="font-semibold">Pedido #{order.id_venta}</h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {order.usuario
                     ? `${order.usuario.nombre} ${order.usuario.primer_apellido}`
                     : `Usuario #${order.id_usuario}`}{' '}
                   · {new Date(order.fecha_creacion).toLocaleString()}
                 </p>
               </div>
-              <span className="rounded bg-gray-200 px-3 py-1 text-sm">
+              <span className="rounded bg-gray-200 dark:bg-gray-700 px-3 py-1 text-sm">
                 {order.estado_venta?.nombre_estado}
               </span>
             </div>

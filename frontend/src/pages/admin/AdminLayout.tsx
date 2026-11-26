@@ -15,7 +15,7 @@ function linkClass({ isActive }: { isActive: boolean }): string {
   return `block rounded px-3 py-2 text-sm ${
     isActive
       ? 'bg-indigo-600 font-semibold text-white'
-      : 'text-gray-700 hover:bg-gray-100'
+      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
   }`
 }
 
@@ -27,13 +27,13 @@ export default function AdminLayout() {
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="rounded border bg-white px-4 py-2 text-left text-sm font-semibold text-gray-700 shadow lg:hidden"
+        className="rounded border bg-white dark:bg-gray-800 px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200 shadow lg:hidden"
       >
         {open ? 'Ocultar menú' : 'Mostrar menú'}
       </button>
 
       <aside className={`${open ? 'block' : 'hidden'} w-full shrink-0 lg:block lg:w-64`}>
-        <nav className="space-y-6 rounded-lg bg-white p-4 shadow">
+        <nav className="space-y-6 rounded-lg bg-white dark:bg-gray-800 p-4 shadow">
           <div>
             <p className="px-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
               Administración

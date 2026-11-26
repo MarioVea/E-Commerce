@@ -4,12 +4,12 @@ import { api } from '../services/api'
 import type { Order } from '../types'
 
 const statusColors: Record<string, string> = {
-  Pendiente: 'bg-yellow-100 text-yellow-800',
-  Pagada: 'bg-blue-100 text-blue-800',
-  Enviada: 'bg-indigo-100 text-indigo-800',
-  Entregada: 'bg-green-100 text-green-800',
-  Cancelada: 'bg-red-100 text-red-800',
-  Devuelta: 'bg-gray-200 text-gray-800',
+  Pendiente: 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300',
+  Pagada: 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
+  Enviada: 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300',
+  Entregada: 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300',
+  Cancelada: 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300',
+  Devuelta: 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200',
 }
 
 export default function Orders() {
@@ -38,17 +38,17 @@ export default function Orders() {
     },
   })
 
-  if (isLoading) return <p className="p-8 text-gray-500">Cargando pedidos...</p>
-  if (isError) return <p className="p-8 text-red-600">No se pudieron cargar los pedidos.</p>
+  if (isLoading) return <p className="p-8 text-gray-500 dark:text-gray-400">Cargando pedidos...</p>
+  if (isError) return <p className="p-8 text-red-600 dark:text-red-400">No se pudieron cargar los pedidos.</p>
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-10">
       <h1 className="text-2xl font-bold">Mis pedidos</h1>
 
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       {(!data || data.length === 0) && (
-        <p className="mt-4 text-gray-600">Aún no tienes pedidos.</p>
+        <p className="mt-4 text-gray-600 dark:text-gray-300">Aún no tienes pedidos.</p>
       )}
 
       <div className="mt-6 space-y-4">
@@ -58,17 +58,17 @@ export default function Orders() {
           const canReturn = status === 'Entregada'
 
           return (
-            <article key={order.id_venta} className="rounded-lg bg-white p-5 shadow">
+            <article key={order.id_venta} className="rounded-lg bg-white dark:bg-gray-800 p-5 shadow">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
                   <h2 className="font-semibold">Pedido #{order.id_venta}</h2>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(order.fecha_creacion).toLocaleString()}
                   </p>
                 </div>
                 <span
                   className={`rounded px-3 py-1 text-sm ${
-                    statusColors[status] ?? 'bg-gray-100 text-gray-700'
+                    statusColors[status] ?? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
                   }`}
                 >
                   {status}
@@ -94,7 +94,7 @@ export default function Orders() {
                     <button
                       onClick={() => action.mutate({ id: order.id_venta, type: 'cancel' })}
                       disabled={action.isPending}
-                      className="rounded border border-red-600 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
+                      className="rounded border border-red-600 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
                     >
                       Cancelar pedido
                     </button>
@@ -103,7 +103,7 @@ export default function Orders() {
                     <button
                       onClick={() => action.mutate({ id: order.id_venta, type: 'return' })}
                       disabled={action.isPending}
-                      className="rounded border border-gray-600 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      className="rounded border border-gray-600 dark:border-gray-500 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
                       Devolver pedido
                     </button>

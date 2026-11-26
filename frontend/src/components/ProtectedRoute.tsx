@@ -12,7 +12,7 @@ export default function ProtectedRoute({ role, children }: ProtectedRouteProps) 
   const { user, loading } = useAuth()
 
   if (loading) {
-    return <p className="p-8 text-center text-gray-500">Cargando...</p>
+    return <p className="p-8 text-center text-gray-500 dark:text-gray-400">Cargando...</p>
   }
 
   if (!user) {

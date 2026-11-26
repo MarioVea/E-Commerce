@@ -8,7 +8,7 @@ export default function Cart() {
     return (
       <section className="mx-auto max-w-4xl px-4 py-16">
         <h1 className="text-2xl font-bold">Carrito</h1>
-        <p className="mt-4 text-gray-600">Tu carrito está vacío.</p>
+        <p className="mt-4 text-gray-600 dark:text-gray-300">Tu carrito está vacío.</p>
         <Link
           to="/catalog"
           className="mt-6 inline-block rounded bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
@@ -27,7 +27,7 @@ export default function Cart() {
         {items.map((item) => (
           <div
             key={item.id_producto_color}
-            className="flex flex-col gap-4 rounded-lg bg-white p-4 shadow sm:flex-row sm:items-center"
+            className="flex flex-col gap-4 rounded-lg bg-white dark:bg-gray-800 p-4 shadow sm:flex-row sm:items-center"
           >
             {item.imagen_url ? (
               <img
@@ -36,17 +36,17 @@ export default function Cart() {
                 className="h-20 w-20 rounded object-cover"
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded bg-gray-100 text-3xl">
+              <div className="flex h-20 w-20 items-center justify-center rounded bg-gray-100 dark:bg-gray-700 text-3xl">
                 🧢
               </div>
             )}
 
             <div className="flex-1">
               <h2 className="font-semibold">{item.nombre_producto}</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 {item.color ?? 'Color'} / {item.talla ?? 'Única'}
               </p>
-              <p className="text-indigo-600">${item.precio.toFixed(2)}</p>
+              <p className="text-indigo-600 dark:text-indigo-400">${item.precio.toFixed(2)}</p>
             </div>
 
             <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export default function Cart() {
               />
               <button
                 onClick={() => removeItem(item.id_producto_color)}
-                className="text-sm text-red-600 hover:text-red-700"
+                className="text-sm text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-400"
               >
                 Quitar
               </button>
